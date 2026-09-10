@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: only light !important;
+    supported-color-schemes: only light !important;
+    forced-color-adjust: none !important;
+    -webkit-forced-color-adjust: none !important;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-script: 'Great Vibes', cursive;
+    --font-calligraphy: 'Alex Brush', 'Pinyon Script', 'Great Vibes', cursive;
+  }
+
+  html,
+  body {
+    color-scheme: only light !important;
+    font-family: var(--font-sans);
+    background-color: #FAF7F2 !important;
+    color: #3A2E2B !important;
+    forced-color-adjust: none !important;
+    -webkit-forced-color-adjust: none !important;
+  }
+
+  * {
+    forced-color-adjust: none !important;
+    -webkit-forced-color-adjust: none !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif-heading {
+    font-family: var(--font-serif);
+  }
+
+  .font-script-accent {
+    font-family: var(--font-script);
+  }
+
+  .font-calligraphy {
+    font-family: var(--font-calligraphy);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+
+  :root,
+  html,
+  body {
+    color-scheme: only light !important;
+    background-color: #FAF7F2 !important;
+    color: #3A2E2B !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    forced-color-adjust: none !important;
+    -webkit-forced-color-adjust: none !important;
+  }
+}
+
+/* Custom luxury wedding utility styling */
+.paper-texture {
+  background-color: #FAF7F2;
+  background-image:
+    radial-gradient(at 80% 0%, rgba(243, 229, 216, 0.4) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(245, 239, 235, 0.6) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(239, 232, 222, 0.4) 0px, transparent 50%);
+}
+
+.paper-card {
+  background: #FDFBF7;
+  box-shadow:
+    0 4px 20px -2px rgba(58, 46, 43, 0.05),
+    0 1px 3px 0 rgba(58, 46, 43, 0.03);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+}
+
+.gold-border {
+  border: 1px solid #C5A059;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #B89745 0%, #D4AF37 50%, #9B7E34 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #C5A059 0%, #D4AF37 50%, #B89745 100%);
+}
+
+/* Custom animations */
+@keyframes floatSlow {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF7F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C5A059;
+  border-radius: 3px;
+}
