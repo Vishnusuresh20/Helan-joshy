@@ -84,7 +84,7 @@ export const Countdown: React.FC = () => {
             </p>
 
             <h3 className="font-calligraphy text-4xl sm:text-6xl text-[#3A2E2B] font-normal leading-tight mb-3">
-              Sherin &amp; Jehan are Married
+              {weddingData.couple.groomShort} &amp; {weddingData.couple.brideShort} are Married
             </h3>
 
             <div className="w-12 h-[1px] bg-[#C5A059]/50 mx-auto my-4" />

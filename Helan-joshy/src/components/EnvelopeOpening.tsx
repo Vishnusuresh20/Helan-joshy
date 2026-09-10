@@ -137,11 +137,11 @@ export const EnvelopeOpening: React.FC<EnvelopeOpeningProps> = ({
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
           src="/images/bride.png"
-          alt="Jehan Mary Jacob"
-          className="w-full h-full object-cover object-[center_28%] opacity-95 filter brightness-100 transition-all duration-500"
+          alt={weddingData.couple.bride}
+          className="w-full h-full object-cover object-[center_55%] md:object-[center_48%] opacity-95 filter brightness-100 transition-all duration-500"
         />
         {/* Soft Transparent Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FAF7F2]/20 to-[#FAF7F2]/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2]/10 via-transparent to-[#FAF7F2]/35" />
       </div>
 
       {/* Background Soft Glow */}
@@ -164,25 +164,26 @@ export const EnvelopeOpening: React.FC<EnvelopeOpeningProps> = ({
       {/* INITIAL SHOWCASE: COUPLE NAME, SUBTITLE & TAP BUTTON (Visible before tap) */}
       <div
         ref={textPromptRef}
-        className="relative z-40 text-center max-w-lg w-full mx-auto flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl bg-[#FDFBF7]/60 backdrop-blur-sm border border-[#C5A059]/40 shadow-xl my-auto"
+        className="relative z-40 text-center w-[92%] max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto flex flex-col items-center justify-center px-6 py-8 sm:px-12 sm:py-10 md:px-16 md:py-12 rounded-2xl sm:rounded-3xl bg-[#FDFBF7]/75 backdrop-blur-md border border-[#C5A059]/40 shadow-2xl my-auto"
         style={{
           colorScheme: "only light",
           forcedColorAdjust: "none",
         }}
       >
-
         <h1
-          className="font-calligraphy text-[clamp(2.4rem,9.5vw,4.5rem)] font-normal text-[#3A2E2B] tracking-normal mb-1 drop-shadow-sm whitespace-nowrap leading-tight"
+          className="font-calligraphy text-[clamp(2rem,4.2vw,3.35rem)] font-normal text-[#3A2E2B] tracking-normal mb-2 drop-shadow-sm leading-tight text-center max-w-full px-2"
           style={{
             colorScheme: "only light",
             forcedColorAdjust: "none",
           }}
         >
-          {weddingData.couple.groomShort} &amp; {weddingData.couple.brideShort}
+          <span className="inline-block">{weddingData.couple.groomShort}</span>{" "}
+          <span className="inline-block text-[#C5A059] px-1 font-normal">&amp;</span>{" "}
+          <span className="inline-block">{weddingData.couple.brideShort}</span>
         </h1>
 
         <p
-          className="font-serif italic text-xl sm:text-3xl text-[#C5A059] tracking-wider font-light mb-6"
+          className="font-serif italic text-lg sm:text-2xl md:text-3xl text-[#C5A059] tracking-wider font-light mb-6 sm:mb-8"
           style={{
             colorScheme: "only light",
             forcedColorAdjust: "none",
@@ -305,7 +306,7 @@ export const EnvelopeOpening: React.FC<EnvelopeOpeningProps> = ({
           >
             <img
               src="/images/wax_seal.png"
-              alt="J & S Wax Seal"
+              alt="A & J Wax Seal"
               className="w-full h-full object-contain"
             />
           </div>

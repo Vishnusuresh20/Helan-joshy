@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { weddingData } from "../data/weddingData";
 
+const heroImages = [
+  {
+    src: "/images/og-image.jpg",
+    alt: `${weddingData.couple.groom} & ${weddingData.couple.bride} - Romantic portrait`,
+    position: "object-[center_60%]",
+  },
+  {
+    src: encodeURI("/images/bride copy.png"),
+    alt: `${weddingData.couple.groom} & ${weddingData.couple.bride} - Beach celebration`,
+    position: "object-[center_45%]",
+  },
+  {
+    src: "/images/couple.png",
+    alt: `${weddingData.couple.groom} & ${weddingData.couple.bride} - Romantic moments`,
+    position: "object-[center_35%]",
+  },
+];
+
 export const HeroSection: React.FC = () => {
-  const [showBride, setShowBride] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Preload images for buttery smooth transitions
   useEffect(() => {
-    // Crossfade to bride.png after 2 seconds, then toggle every 4 seconds
-    const timer = setTimeout(() => {
-      setShowBride(true);
-      const interval = setInterval(() => {
-        setShowBride((prev) => !prev);
-      }, 4000);
-      return () => clearInterval(interval);
-    }, 2000);
+    heroImages.forEach((img) => {
+      const imageObj = new Image();
+      imageObj.src = img.src;
+    });
+  }, []);
 
-    return () => clearTimeout(timer);
+  // Automatic slideshow progression every 4 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+    }, 4000);
+
+    return () => clearInterval(timer);
   }, []);
 
   return (
@@ -23,24 +45,21 @@ export const HeroSection: React.FC = () => {
       {/* Container Card */}
       <div className="relative w-full max-w-5xl rounded-lg overflow-hidden border border-[#C5A059]/30 shadow-2xl bg-[#FDFBF7]">
         <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
-          {/* Couple Image Column (7 cols) - Fixed frame container */}
-          <div className="lg:col-span-7 relative min-h-[400px] lg:min-h-[600px] w-full h-full overflow-hidden group">
-            {/* Base Image 1: Couple Photo (always maintains frame ratio) */}
-            <img
-              src="/images/couple.png"
-              alt="Jehan Mary Jacob & Sherin Stephen"
-              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
-            />
-
-            {/* Overlay Image 2: Bride Photo (Crossfades smoothly after 2 seconds) */}
-            <motion.img
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showBride ? 1 : 0 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-              src="/images/bride.png"
-              alt="Jehan Mary Jacob"
-              className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
-            />
+          {/* Couple Image Column (7 cols) - Clean Automatic Changing Frame */}
+          <div className="lg:col-span-7 relative min-h-[420px] lg:min-h-[600px] w-full h-full overflow-hidden group">
+            {/* Animated Image Transition */}
+            <AnimatePresence mode="sync">
+              <motion.img
+                key={currentIndex}
+                src={heroImages[currentIndex].src}
+                alt={heroImages[currentIndex].alt}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+                className={`absolute inset-0 w-full h-full object-cover ${heroImages[currentIndex].position} transition-transform duration-1000 group-hover:scale-105`}
+              />
+            </AnimatePresence>
 
             {/* Subtle Bottom Shadow Overlay for Mobile Only (Crisp & Clear on Desktop) */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#2C221E]/50 via-transparent to-transparent lg:hidden pointer-events-none z-10" />

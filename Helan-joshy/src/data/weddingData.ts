@@ -60,11 +60,11 @@ export interface WeddingData {
 
 export const weddingData: WeddingData = {
   couple: {
-    bride: "Jehan Mary Jacob",
-    groom: "Sherin Stephen",
-    brideShort: "Jehan",
-    groomShort: "Sherin",
-    initials: "S & J",
+    bride: "Jennifer",
+    groom: "Augustine",
+    brideShort: "Jennifer",
+    groomShort: "Augustine",
+    initials: "A & J",
   },
 
   wedding: {
@@ -103,7 +103,7 @@ export const weddingData: WeddingData = {
   },
 
   message:
-    "With the blessings of our beloved parents and families, we joyfully invite you to celebrate the wedding of Jehan Mary Jacob and Sherin Stephen as they begin their new journey together in Christ. Your presence and blessings will make our special day even more meaningful.",
+    "With the blessings of our beloved parents and families, we joyfully invite you to celebrate the wedding of Jennifer and Augustine as they begin their new journey together in Christ. Your presence and blessings will make our special day even more meaningful.",
 
   timeline: [
     {
@@ -144,23 +144,23 @@ export const weddingData: WeddingData = {
   gallery: [
     {
       id: 1,
-      url: "/images/couple.png",
-      title: "Jehan & Sherin",
+      url: "/images/og-image.jpg",
+      title: "Augustine & Jennifer",
       caption: "Pre-wedding portrait in full romance",
-      aspectRatio: "square",
+      aspectRatio: "portrait",
     },
     {
       id: 2,
-      url: "/images/bride.png",
-      title: "The Bride",
-      caption: "Jehan Mary Jacob",
+      url: "/images/couple.png",
+      title: "Jennifer & Augustine",
+      caption: "Pre-wedding portrait by the shore",
       aspectRatio: "portrait",
     },
     {
       id: 3,
-      url: "/images/groom.png",
-      title: "The Groom",
-      caption: "Sherin Stephen",
+      url: "/images/bride.png",
+      title: "The Bride",
+      caption: "Jennifer",
       aspectRatio: "portrait",
     },
     {

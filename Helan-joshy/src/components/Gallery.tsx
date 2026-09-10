@@ -1,6 +1,35 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ZoomIn } from "lucide-react";
+import { weddingData } from "../data/weddingData";
+
+interface GalleryItem {
+  url: string;
+  title: string;
+  subtitle: string;
+  position: string;
+}
+
+const galleryItems: GalleryItem[] = [
+  {
+    url: "/images/og-image.jpg",
+    title: `${weddingData.couple.groom} & ${weddingData.couple.bride}`,
+    subtitle: "Pre-wedding Romance",
+    position: "object-[center_60%]",
+  },
+  {
+    url: "/images/couple.png",
+    title: "Walking Hand-in-Hand",
+    subtitle: `${weddingData.couple.bride} & ${weddingData.couple.groom}`,
+    position: "object-[center_35%]",
+  },
+  {
+    url: "/images/bride.png",
+    title: "Joyful Moments",
+    subtitle: weddingData.couple.bride,
+    position: "object-center",
+  },
+];
 
 export const Gallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -24,59 +53,36 @@ export const Gallery: React.FC = () => {
           <div className="w-16 h-[1px] bg-[#C5A059] mx-auto mt-4" />
         </motion.div>
 
-        {/* Luxury Album Grid Layout with 2 Selected Photos */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          {/* Couple Feature Photo (7 cols) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            onClick={() => setSelectedImage("/images/couple.png")}
-            className="md:col-span-7 relative aspect-[4/3] rounded-sm overflow-hidden border border-[#C5A059]/30 shadow-md group cursor-pointer"
-          >
-            <img
-              src="/images/couple.png"
-              alt="Jehan Mary Jacob & Sherin Stephen"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <div className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-[#3A2E2B]">
-                <ZoomIn className="w-5 h-5" />
+        {/* Luxury Album Grid Layout with 3 Selected Photos */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {galleryItems.map((item, index) => (
+            <motion.div
+              key={item.url}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: index * 0.15 }}
+              onClick={() => setSelectedImage(item.url)}
+              className="relative aspect-[3/4] rounded-sm overflow-hidden border border-[#C5A059]/30 shadow-md group cursor-pointer bg-[#FDFBF7]"
+            >
+              <img
+                src={item.url}
+                alt={item.title}
+                className={`w-full h-full object-cover ${item.position} transition-transform duration-700 group-hover:scale-105`}
+              />
+              <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#3A2E2B] shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                  <ZoomIn className="w-5 h-5" />
+                </div>
               </div>
-            </div>
-            <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
-              <h3 className="font-serif text-xl font-medium">
-                Jehan Mary Jacob &amp; Sherin Stephen
-              </h3>
-              <p className="text-xs text-white/80">Pre-wedding Couple Portrait</p>
-            </div>
-          </motion.div>
-
-          {/* Bride Solo Portrait (5 cols) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            onClick={() => setSelectedImage("/images/bride.png")}
-            className="md:col-span-5 relative aspect-[4/3] sm:aspect-[3/4] rounded-sm overflow-hidden border border-[#C5A059]/30 shadow-md group cursor-pointer"
-          >
-            <img
-              src="/images/bride.png"
-              alt="Jehan Mary Jacob"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <div className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-[#3A2E2B]">
-                <ZoomIn className="w-5 h-5" />
+              <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white">
+                <h3 className="font-serif text-lg font-medium tracking-wide">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-white/80">{item.subtitle}</p>
               </div>
-            </div>
-            <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
-              <h3 className="font-serif text-lg font-medium">The Bride</h3>
-              <p className="text-xs text-white/80">Jehan Mary Jacob</p>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
       </div>
 
@@ -92,7 +98,7 @@ export const Gallery: React.FC = () => {
           >
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
