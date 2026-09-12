@@ -43,11 +43,17 @@ export const InvitationCardReveal: React.FC = () => {
           </p>
         </div>
 
-        {/* Divider */}
-        <div className="flex items-center justify-center gap-3 my-8">
-          <div className="w-12 h-[1px] bg-[#C5A059]/40" />
-          <div className="w-2 h-2 rounded-full bg-[#C5A059]/60" />
-          <div className="w-12 h-[1px] bg-[#C5A059]/40" />
+        {/* Divider with Bespoke Wax Seal */}
+        <div className="flex items-center justify-center gap-4 my-6">
+          <div className="w-12 sm:w-16 h-[1px] bg-[#C5A059]/40" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 drop-shadow-md shrink-0">
+            <img
+              src="/images/wax_seal.png?v=2"
+              alt="Augustine & Jennifer Wax Seal"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="w-12 sm:w-16 h-[1px] bg-[#C5A059]/40" />
         </div>
 
         {/* Event Details */}

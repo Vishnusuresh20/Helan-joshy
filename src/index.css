@@ -128,6 +128,42 @@
   animation: pulseGlow 3s ease-in-out infinite;
 }
 
+@keyframes waveBar1 {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+
+@keyframes waveBar2 {
+  0%, 100% { height: 14px; }
+  50% { height: 6px; }
+}
+
+@keyframes waveBar3 {
+  0%, 100% { height: 8px; }
+  50% { height: 16px; }
+}
+
+@keyframes waveBar4 {
+  0%, 100% { height: 12px; }
+  50% { height: 4px; }
+}
+
+.animate-waveform-1 {
+  animation: waveBar1 0.8s ease-in-out infinite;
+}
+
+.animate-waveform-2 {
+  animation: waveBar2 0.65s ease-in-out infinite;
+}
+
+.animate-waveform-3 {
+  animation: waveBar3 0.9s ease-in-out infinite;
+}
+
+.animate-waveform-4 {
+  animation: waveBar4 0.7s ease-in-out infinite;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

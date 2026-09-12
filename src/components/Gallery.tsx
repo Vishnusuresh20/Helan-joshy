@@ -94,7 +94,7 @@ export const Gallery: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-50 bg-black/90 p-4 sm:p-8 flex items-center justify-center backdrop-blur-md cursor-zoom-out"
+            className="fixed inset-0 z-[100] bg-black/90 p-4 sm:p-8 flex items-center justify-center backdrop-blur-md cursor-zoom-out"
           >
             <button
               onClick={() => setSelectedImage(null)}
