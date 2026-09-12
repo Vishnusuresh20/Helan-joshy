@@ -1,11 +1,13 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
-import { Sparkles, Eye, Heart, Utensils, CheckCircle2 } from "lucide-react";
+import { Sparkles, Eye, Heart, Utensils } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 
+type TabId = "note" | "vow" | "feast";
+
 interface ScratchCardOption {
-  id: "note" | "vow" | "feast";
+  id: TabId;
   label: string;
   icon: React.ReactNode;
   title: string;
@@ -37,19 +39,21 @@ const SCRATCH_OPTIONS: ScratchCardOption[] = [
 ];
 
 export const ScratchCardSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"note" | "vow" | "feast">("note");
-  const [scratchProgress, setScratchProgress] = useState(0);
-  const [isRevealed, setIsRevealed] = useState(false);
-  const [hasScratched, setHasScratched] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabId>("note");
+  const [revealedCards, setRevealedCards] = useState<Record<TabId, boolean>>({
+    note: false,
+    vow: false,
+    feast: false,
+  });
   const [isScratching, setIsScratching] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
 
-  // Initialize and paint the metallic gold scratch layer
+  // Initialize and paint the metallic gold scratch layer for current card
   const initFoil = useCallback(() => {
-    if (hasScratched || isRevealed) return;
+    if (revealedCards[activeTab]) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -119,22 +123,19 @@ export const ScratchCardSection: React.FC = () => {
     ctx.font = '400 11px "Inter", sans-serif';
     ctx.fillStyle = "rgba(250, 247, 242, 0.85)";
     ctx.fillText("Rub to unveil the secret surprise", centerX, centerY + 56);
+  }, [activeTab, revealedCards]);
 
-    setScratchProgress(0);
-    setIsRevealed(false);
-  }, [hasScratched, isRevealed]);
-
-  // Set up canvas when tab changes or component mounts (only if not yet scratched)
+  // Set up canvas when tab changes or component mounts (only if current card is not yet scratched)
   useEffect(() => {
-    if (hasScratched || isRevealed) return;
+    if (revealedCards[activeTab]) return;
 
     // slight delay to let layout compute exact pixel dimensions
     const timer = setTimeout(() => {
       initFoil();
-    }, 50);
+    }, 60);
 
     const handleResize = () => {
-      if (!hasScratched && !isRevealed) {
+      if (!revealedCards[activeTab]) {
         initFoil();
       }
     };
@@ -144,12 +145,26 @@ export const ScratchCardSection: React.FC = () => {
       clearTimeout(timer);
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeTab, initFoil, hasScratched, isRevealed]);
+  }, [activeTab, initFoil, revealedCards]);
 
-  // Check how much of the foil has been scratched away
+  const triggerRevealCelebration = useCallback((tab?: TabId) => {
+    const targetTab = tab || activeTab;
+    setRevealedCards((prev) => ({ ...prev, [targetTab]: true }));
+
+    // Golden Sparkle Confetti Blast
+    confetti({
+      particleCount: 75,
+      spread: 70,
+      origin: { y: 0.65 },
+      colors: ["#D4AF37", "#C5A059", "#FAF7F2", "#E8D5B5", "#B8860B"],
+      disableForReducedMotion: true,
+    });
+  }, [activeTab]);
+
+  // Check how much of the foil has been scratched away on current card
   const calculateProgress = () => {
     const canvas = canvasRef.current;
-    if (!canvas || isRevealed) return;
+    if (!canvas || revealedCards[activeTab]) return;
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
 
@@ -168,36 +183,20 @@ export const ScratchCardSection: React.FC = () => {
       }
 
       const percent = Math.round((clearPixels / totalSampled) * 100);
-      setScratchProgress(percent);
 
-      // When more than 40% is scratched, celebrate and auto-reveal!
-      if (percent >= 40 && !isRevealed) {
-        triggerRevealCelebration();
+      // When more than 40% is scratched on this card, celebrate and auto-reveal this card!
+      if (percent >= 40 && !revealedCards[activeTab]) {
+        triggerRevealCelebration(activeTab);
       }
     } catch {
       // ignore security exceptions if any
     }
   };
 
-  const triggerRevealCelebration = () => {
-    setIsRevealed(true);
-    setHasScratched(true);
-    setScratchProgress(100);
-
-    // Golden Sparkle Confetti Blast
-    confetti({
-      particleCount: 75,
-      spread: 70,
-      origin: { y: 0.65 },
-      colors: ["#D4AF37", "#C5A059", "#FAF7F2", "#E8D5B5", "#B8860B"],
-      disableForReducedMotion: true,
-    });
-  };
-
   // Perform scratching stroke
   const scratch = (x: number, y: number) => {
     const canvas = canvasRef.current;
-    if (!canvas || isRevealed) return;
+    if (!canvas || revealedCards[activeTab]) return;
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
 
@@ -238,7 +237,7 @@ export const ScratchCardSection: React.FC = () => {
   };
 
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
-    if (isRevealed) return;
+    if (revealedCards[activeTab]) return;
     setIsScratching(true);
     const coords = getCoordinates(e);
     lastPointRef.current = coords;
@@ -246,7 +245,7 @@ export const ScratchCardSection: React.FC = () => {
   };
 
   const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isScratching || isRevealed) return;
+    if (!isScratching || revealedCards[activeTab]) return;
     const coords = getCoordinates(e);
     scratch(coords.x, coords.y);
   };
@@ -305,25 +304,6 @@ export const ScratchCardSection: React.FC = () => {
 
         {/* Scratch Card Frame */}
         <div className="relative paper-card rounded-2xl sm:rounded-3xl border border-[#C5A059]/40 shadow-2xl p-4 sm:p-8 bg-[#FDFBF7]">
-          {/* Progress Indicator */}
-          <div className="flex items-center justify-between mb-4 px-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-widest text-[#C5A059]">
-                Scratch Progress
-              </span>
-              <span className="text-xs font-mono font-bold text-[#3A2E2B]">
-                {scratchProgress}%
-              </span>
-            </div>
-
-            {isRevealed && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-0.5 rounded-full">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Unveiled!
-              </span>
-            )}
-          </div>
-
           {/* Card Canvas Container */}
           <div
             ref={containerRef}
@@ -423,6 +403,7 @@ export const ScratchCardSection: React.FC = () => {
 
             {/* SCRATCH CANVAS OVERLAY */}
             <canvas
+              key={activeTab}
               ref={canvasRef}
               onMouseDown={handleStart}
               onMouseMove={handleMove}
@@ -431,20 +412,20 @@ export const ScratchCardSection: React.FC = () => {
               onTouchStart={handleStart}
               onTouchMove={handleMove}
               onTouchEnd={handleEnd}
-              className={`absolute inset-0 w-full h-full cursor-crosshair touch-none transition-opacity duration-700 ${isRevealed ? "opacity-0 pointer-events-none" : "opacity-100"
+              className={`absolute inset-0 w-full h-full cursor-crosshair touch-none transition-opacity duration-700 ${revealedCards[activeTab] ? "opacity-0 pointer-events-none" : "opacity-100"
                 }`}
             />
           </div>
 
-          {/* Action Button Below Scratch Card - Only shown before scratch/reveal */}
-          {!isRevealed && (
+          {/* Showcase Button Below Scratch Card (Visual Cue Only - No Click Functionality) */}
+          {!revealedCards[activeTab] && (
             <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6">
               <button
-                onClick={triggerRevealCelebration}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#3A2E2B] text-white hover:bg-[#C5A059] shadow-md transition-all duration-300 cursor-pointer active:scale-95"
+                type="button"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#3A2E2B] text-white shadow-md cursor-default select-none pointer-events-none"
               >
                 <Eye className="w-3.5 h-3.5" />
-                <span>Reveal All</span>
+                <span>Reveal This Note</span>
               </button>
             </div>
           )}
